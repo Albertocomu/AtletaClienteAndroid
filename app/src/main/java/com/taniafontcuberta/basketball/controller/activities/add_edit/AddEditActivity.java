@@ -30,6 +30,7 @@ import com.taniafontcuberta.basketball.controller.managers.TeamManager;
 import com.taniafontcuberta.basketball.model.Atleta;
 import com.taniafontcuberta.basketball.model.Team;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -57,6 +58,7 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
 
     private View mProgressView;
     private View mAddFormView;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -85,7 +87,6 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
         apellidosView = (EditText) findViewById(R.id.playerApellidos);
         nacionalidadView = (EditText) findViewById(R.id.playerNacionalidad);
         birthdateView = (DatePicker) findViewById(R.id.playerBirthdate);
-
 
 
         Button addButton = (Button) findViewById(R.id.add_edit_button);
@@ -156,7 +157,7 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
             focusView = apellidosView;
             cancel = true;
         }
-        if(TextUtils.isEmpty(nacionalidad)){
+        if (TextUtils.isEmpty(nacionalidad)) {
             nacionalidadView.setError(getString(R.string.error_field_required));
             focusView = nacionalidadView;
             cancel = true;
@@ -174,11 +175,18 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
             String pattern = "yyyy-MM-dd";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-            Date date = simpleDateFormat.parse(birthdate);
+            atleta = new Atleta();
+
+            Date date = null;
+            try {
+                date = simpleDateFormat.parse(birthdate);
+                atleta.setFechaNacimiento(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             atleta.setName(name);
             atleta.setApellido(apellido);
             atleta.setNacionalidad(nacionalidad);
-            atleta.setFechaNacimiento(date);
 
             if (extras.getString("type").equals("add")) {
                 AtletaManager.getInstance().createPlayer(AddEditActivity.this, atleta);
@@ -204,7 +212,6 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
     public void onSucces(Atleta atleta) {
 
     }
-
 
 
     @Override

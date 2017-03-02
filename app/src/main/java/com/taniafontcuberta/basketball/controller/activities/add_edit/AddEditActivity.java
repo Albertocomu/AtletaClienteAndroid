@@ -30,32 +30,28 @@ import com.taniafontcuberta.basketball.controller.managers.TeamManager;
 import com.taniafontcuberta.basketball.model.Atleta;
 import com.taniafontcuberta.basketball.model.Team;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
  * A Add screen that offers Add via username/basketsView.
  */
-public class AddEditActivity extends AppCompatActivity implements AtletaCallback, TeamCallback {
+public class AddEditActivity extends AppCompatActivity implements AtletaCallback {
 
     // UI references.
     private EditText nameView;
-    private EditText basketsView;
-    private EditText reboundsView;
-    private EditText assistsView;
-    private Spinner fieldPositionView;
-    private Spinner teamView;
+    private EditText apellidosView;
+    private EditText nacionalidadView;
     private DatePicker birthdateView;
     private Atleta atleta;
-    private List<Team> teams;
     private Bundle extras;
 
     // ATTR
     private String name;
-    private String baskets;
-    private String assists;
-    private String rebounds;
+    private String apellido;
+    private String nacionalidad;
     private String birthdate;
-    private String fieldPosition;
     private String id;
     private ArrayAdapter adapterTeams;
 
@@ -78,15 +74,6 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
         }
         setContentView(R.layout.activity_add_edit);
 
-        /* GET ALL TEAMS */
-        TeamManager.getInstance().getAllTeams(AddEditActivity.this);
-
-        atleta = new Atleta();
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setTitle(getTitle());
-
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -95,31 +82,11 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
 
         // Set up the Add form.
         nameView = (EditText) findViewById(R.id.playerName);
-        basketsView = (EditText) findViewById(R.id.baskets);
-        reboundsView = (EditText) findViewById(R.id.rebounds);
-        assistsView = (EditText) findViewById(R.id.assists);
-        fieldPositionView = (Spinner) findViewById(R.id.fieldPosition);
-        birthdateView = (DatePicker) findViewById(R.id.birthdate);
-        teamView = (Spinner) findViewById(R.id.teamSpinner);
+        apellidosView = (EditText) findViewById(R.id.playerApellidos);
+        nacionalidadView = (EditText) findViewById(R.id.playerNacionalidad);
+        birthdateView = (DatePicker) findViewById(R.id.playerBirthdate);
 
 
-        // FieldPosition Spinner
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.posiciones, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        fieldPositionView.setAdapter(adapter);
-
-        /* SET FIELDPOSITION TO PLAYER */
-        fieldPositionView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-                fieldPosition = parentView.getItemAtPosition(position).toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         Button addButton = (Button) findViewById(R.id.add_edit_button);
 
@@ -153,19 +120,18 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
     private void attemptAdd(View v) {
         // Reset errors.
         nameView.setError(null);
-        basketsView.setError(null);
-        reboundsView.setError(null);
-        assistsView.setError(null);
+        apellidosView.setError(null);
+        nacionalidadView.setError(null);
 
         // Store values at the  Add attempt.
         name = nameView.getText().toString();
-        baskets = this.basketsView.getText().toString();
-        rebounds = this.reboundsView.getText().toString();
-        assists = this.assistsView.getText().toString();
+        apellido = this.apellidosView.getText().toString();
+        nacionalidad = this.nacionalidadView.getText().toString();
 
         String year = String.valueOf(this.birthdateView.getYear());
         String month = String.valueOf(this.birthdateView.getMonth() + 1);
         String day = String.valueOf(this.birthdateView.getDayOfMonth());
+
 
         if (this.birthdateView.getDayOfMonth() < 10) {
             day = "0" + day;
@@ -185,39 +151,16 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
             focusView = nameView;
             cancel = true;
         }
-        if (TextUtils.isEmpty(baskets)) {
-            basketsView.setError(getString(R.string.error_field_required));
-            focusView = basketsView;
+        if (TextUtils.isEmpty(apellido)) {
+            apellidosView.setError(getString(R.string.error_field_required));
+            focusView = apellidosView;
             cancel = true;
         }
-        if(Integer.parseInt(baskets) < 0){
-            reboundsView.setError(" < 0");
-            focusView = reboundsView;
+        if(TextUtils.isEmpty(nacionalidad)){
+            nacionalidadView.setError(getString(R.string.error_field_required));
+            focusView = nacionalidadView;
             cancel = true;
         }
-
-        if (TextUtils.isEmpty(rebounds)) {
-            reboundsView.setError(getString(R.string.error_field_required));
-            focusView = reboundsView;
-            cancel = true;
-        }
-        if(Integer.parseInt(rebounds) < 0){
-            reboundsView.setError(" < 0");
-            focusView = reboundsView;
-            cancel = true;
-        }
-        if (TextUtils.isEmpty(assists)) {
-            assistsView.setError(getString(R.string.error_field_required));
-            focusView = assistsView;
-            cancel = true;
-        }
-        if(Integer.parseInt(assists) < 0){
-            reboundsView.setError(" < 0");
-            focusView = reboundsView;
-            cancel = true;
-        }
-
-
 
         if (cancel) {
             // There was an error; don't attempt Add and focus the first
@@ -227,6 +170,15 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
             // Show a progress spinner, and kick off a background task to
             // perform the user Add attempt.
             showProgress(true);
+
+            String pattern = "yyyy-MM-dd";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+            Date date = simpleDateFormat.parse(birthdate);
+            atleta.setName(name);
+            atleta.setApellido(apellido);
+            atleta.setNacionalidad(nacionalidad);
+            atleta.setFechaNacimiento(date);
 
             if (extras.getString("type").equals("add")) {
                 AtletaManager.getInstance().createPlayer(AddEditActivity.this, atleta);
@@ -249,32 +201,11 @@ public class AddEditActivity extends AppCompatActivity implements AtletaCallback
     }
 
     @Override
-    public void onSucces() {
+    public void onSucces(Atleta atleta) {
 
     }
 
-    @Override
-    public void onSuccessTeam(List<Team> teamList) {
-        teams = teamList;
-        adapterTeams = new ArrayAdapter(AddEditActivity.this, android.R.layout.simple_spinner_item, teams);
-        teamView.setAdapter(adapterTeams);
 
-        if (extras.getString("type").equals("edit")) {
-
-        }
-
-        /* ADD SELECTED TEAM TO PLAYER */
-        teamView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
 
     @Override
     public void onFailure(Throwable t) {

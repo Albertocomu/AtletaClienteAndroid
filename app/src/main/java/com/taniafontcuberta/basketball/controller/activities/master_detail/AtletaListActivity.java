@@ -61,8 +61,8 @@ public class AtletaListActivity extends AppCompatActivity implements AtletaCallb
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(),AddEditActivity.class);
-                intent.putExtra("type","add");
+                Intent intent = new Intent(view.getContext(), AddEditActivity.class);
+                intent.putExtra("type", "add");
                 startActivityForResult(intent, 0);
             }
         });
@@ -97,9 +97,11 @@ public class AtletaListActivity extends AppCompatActivity implements AtletaCallb
     }
 
     @Override
-    public void onSucces() {
+    public void onSucces(Atleta atleta) {
 
     }
+
+
 
     @Override
     public void onFailure(Throwable t) {
@@ -128,9 +130,7 @@ public class AtletaListActivity extends AppCompatActivity implements AtletaCallb
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).getId().toString());
-            holder.mContentView.setText(mValues.get(position).getName());
-            holder.mContentView2.setText(mValues.get(position).getApellido());
-            holder.mContentView3.setText(mValues.get(position).getNacionalidad());
+            holder.mContentView.setText(mValues.get(position).getName() + " " + mValues.get(position).getApellido() + " " + mValues.get(position).getNacionalidad() + " " + mValues.get(position).getFechaNacimiento());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -163,8 +163,6 @@ public class AtletaListActivity extends AppCompatActivity implements AtletaCallb
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
-            public final TextView mContentView2;
-            public final TextView mContentView3;
             public Atleta mItem;
 
             public ViewHolder(View view) {
@@ -172,8 +170,6 @@ public class AtletaListActivity extends AppCompatActivity implements AtletaCallb
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
-                mContentView2 = (TextView) view.findViewById(R.id.content2);
-                mContentView3 = (TextView) view.findViewById(R.id.content3);
             }
 
             @Override

@@ -133,9 +133,10 @@ public class AtletaTopActivity extends AppCompatActivity implements AtletaCallba
     }
 
     @Override
-    public void onSucces() {
+    public void onSucces(Atleta atleta) {
 
     }
+
 
     @Override
     public void onFailure(Throwable t) {

@@ -84,7 +84,7 @@ public class AtletaManager {
     /* POST - CREATE PLAYER */
 
     public synchronized void createPlayer(final AtletaCallback atletaCallback, Atleta atleta) {
-        Call<Atleta> call = atletaService.createPlayer(UserLoginManager.getInstance().getBearerToken(), atleta);
+        Call<Atleta> call = atletaService.createAtleta(UserLoginManager.getInstance().getBearerToken(), atleta);
         call.enqueue(new Callback<Atleta>() {
             @Override
             public void onResponse(Call<Atleta> call, Response<Atleta> response) {
@@ -92,7 +92,8 @@ public class AtletaManager {
 
                 if (code == 200 || code == 201) {
                     //atletaCallback.onSuccess1(apuestas1x2);
-                    Log.e("Atleta->", "createPlayer: OK" + 100);
+                    Log.e("Atleta->", "createAtleta: OK" + 100);
+                    atletaCallback.onSucces(response.body());
 
                 } else {
                     atletaCallback.onFailure(new Throwable("ERROR" + code + ", " + response.raw().message()));
@@ -101,7 +102,7 @@ public class AtletaManager {
 
             @Override
             public void onFailure(Call<Atleta> call, Throwable t) {
-                Log.e("AtletaManager->", "createPlayer: " + t);
+                Log.e("AtletaManager->", "createAtleta: " + t);
 
                 atletaCallback.onFailure(t);
             }

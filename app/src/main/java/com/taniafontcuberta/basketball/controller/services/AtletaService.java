@@ -22,7 +22,7 @@ public interface AtletaService {
     );
 
     @POST("api/atletas") // Se tiene que cambiar en un interfaz propia
-    Call<Atleta> createPlayer(
+    Call<Atleta> createAtleta(
             @Header("Authorization") String Authorization,
             @Body Atleta atleta);
 

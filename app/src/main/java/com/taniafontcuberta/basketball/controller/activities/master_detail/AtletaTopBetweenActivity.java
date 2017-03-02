@@ -108,9 +108,10 @@ public class AtletaTopBetweenActivity extends AppCompatActivity implements Atlet
     }
 
     @Override
-    public void onSucces() {
+    public void onSucces(Atleta atleta) {
 
     }
+
 
     @Override
     public void onFailure(Throwable t) {

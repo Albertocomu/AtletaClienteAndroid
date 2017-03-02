@@ -98,9 +98,11 @@ public class AtletaDetailFragment extends Fragment implements AtletaCallback {
     }
 
     @Override
-    public void onSucces() {
+    public void onSucces(Atleta atleta) {
 
     }
+
+
 
     @Override
     public void onFailure(Throwable t) {

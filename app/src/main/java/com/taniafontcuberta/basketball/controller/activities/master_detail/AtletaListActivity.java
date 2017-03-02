@@ -22,6 +22,9 @@ import com.taniafontcuberta.basketball.controller.managers.AtletaCallback;
 import com.taniafontcuberta.basketball.controller.managers.AtletaManager;
 import com.taniafontcuberta.basketball.model.Atleta;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -128,9 +131,11 @@ public class AtletaListActivity extends AppCompatActivity implements AtletaCallb
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             holder.mItem = mValues.get(position);
             holder.mIdView.setText(mValues.get(position).getId().toString());
-            holder.mContentView.setText(mValues.get(position).getName() + " " + mValues.get(position).getApellido() + " " + mValues.get(position).getNacionalidad() + " " + mValues.get(position).getFechaNacimiento());
+            holder.mContentView.setText(mValues.get(position).getName() + " " + mValues.get(position).getApellido() + " " + mValues.get(position).getNacionalidad());
+            holder.mDateView.setText(dateFormat.format(mValues.get(position).getFechaNacimiento()));
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -163,6 +168,7 @@ public class AtletaListActivity extends AppCompatActivity implements AtletaCallb
             public final View mView;
             public final TextView mIdView;
             public final TextView mContentView;
+            public final TextView mDateView;
             public Atleta mItem;
 
             public ViewHolder(View view) {
@@ -170,6 +176,7 @@ public class AtletaListActivity extends AppCompatActivity implements AtletaCallb
                 mView = view;
                 mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
+                mDateView = (TextView) view.findViewById(R.id.content2);
             }
 
             @Override

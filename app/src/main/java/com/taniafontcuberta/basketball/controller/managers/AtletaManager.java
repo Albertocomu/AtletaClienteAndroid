@@ -46,7 +46,7 @@ public class AtletaManager {
     /* GET - GET ALL PLAYER */
 
     public synchronized void getAllAtletas(final AtletaCallback atletaCallback) {
-        Call<List<Atleta>> call = atletaService.getAllPlayer(UserLoginManager.getInstance().getBearerToken());
+        Call<List<Atleta>> call = atletaService.getAllAtletas(UserLoginManager.getInstance().getBearerToken());
 
         call.enqueue(new Callback<List<Atleta>>() {
             @Override
@@ -162,7 +162,7 @@ public class AtletaManager {
     /* GET - TOP PLAYERS BY NAME */
 
     public synchronized void getPlayerByName(final AtletaCallback atletaCallback, String name) {
-        // Call<List<Apuesta>> call = atletaService.getAllPlayer(UserLoginManager.getInstance(context).getBearerToken());
+        // Call<List<Apuesta>> call = atletaService.getAllAtletas(UserLoginManager.getInstance(context).getBearerToken());
     }
 
     /* GET - TOP PLAYERS BY X BASKETS */

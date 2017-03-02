@@ -17,7 +17,7 @@ import retrofit2.http.Path;
 public interface AtletaService {
 
     @GET("/api/atletas")
-    Call<List<Atleta>> getAllPlayer(
+    Call<List<Atleta>> getAllAtletas(
             @Header("Authorization") String Authorization
     );
 
